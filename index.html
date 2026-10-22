@@ -116,96 +116,62 @@ o meu exemplo para isso são e o caso anteriror são:
     <a href="https://youtu.be/UonuirklLkQ?si=tgz8qtvDuGO94uzp" >Ângulos e movimento</a>
     <hr>
     <a href="https://youtu.be/z8CG1dvNSOs?si=JNowydXy6c-_7E3b"> Stanley Kubrick</a>
-</footer>
-    /* Menu lateral */
-#menu-lateral {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 260px;
-    height: 100vh;
-    padding: 20px 15px;
-    box-sizing: border-box;
-    overflow-y: auto;
-    background-color: #181818;
-    color: white;
-    z-index: 1000;
-    border-right: 2px solid #444;
-}
+</footer>document.addEventListener("DOMContentLoaded", () => {
+    const indice = document.getElementById("indice");
+    const titulos = document.querySelectorAll("h1, h2, h3");
+    const links = [];
 
-#menu-lateral h2 {
-    font-size: 22px;
-    margin: 0 0 20px;
-    color: #f0c674;
-}
+    titulos.forEach((titulo, index) => {
+        // Cria um identificador para cada título
+        if (!titulo.id) {
+            titulo.id = `secao-${index + 1}`;
+        }
 
-#indice a {
-    display: block;
-    color: #ddd;
-    text-decoration: none;
-    padding: 9px 10px;
-    margin-bottom: 4px;
-    border-radius: 5px;
-    font-size: 14px;
-    line-height: 1.4;
-    transition: background-color 0.2s, color 0.2s;
-}
+        // Usa o texto do título como tópico
+        const texto = titulo.textContent.trim().replace(/\s+/g, " ");
 
-#indice a:hover {
-    background-color: #383838;
-    color: #f0c674;
-}
+        const link = document.createElement("a");
+        link.href = `#${titulo.id}`;
+        link.textContent = texto;
+        link.classList.add(`nivel-${titulo.tagName.substring(1)}`);
 
-/* Destaque do tópico atual */
-#indice a.ativo {
-    background-color: #444;
-    color: #f0c674;
-    border-left: 3px solid #f0c674;
-}
+        // Navegação suave ao clicar
+        link.addEventListener("click", (evento) => {
+            evento.preventDefault();
 
-/* Recuo conforme o nível do título */
-#indice a.nivel-2 {
-    padding-left: 22px;
-    font-size: 13px;
-}
+            titulo.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
 
-#indice a.nivel-3 {
-    padding-left: 36px;
-    font-size: 12px;
-}
+            history.replaceState(null, "", `#${titulo.id}`);
+            atualizarAtivo(titulo);
+        });
 
-/* Espaço para o menu não cobrir o conteúdo */
-body {
-    margin-left: 280px;
-    padding: 20px;
-    scroll-behavior: smooth;
-}
+        indice.appendChild(link);
+        links.push({ titulo, link });
+    });
 
-/* Evita que o título fique escondido ao navegar */
-h1, h2, h3 {
-    scroll-margin-top: 20px;
-}
-
-/* Adaptação para celulares */
-@media (max-width: 768px) {
-    #menu-lateral {
-        position: relative;
-        width: 100%;
-        height: auto;
-        max-height: 280px;
-        border-right: none;
-        border-bottom: 2px solid #444;
+    function atualizarAtivo(tituloAtual) {
+        links.forEach(({ titulo, link }) => {
+            link.classList.toggle("ativo", titulo === tituloAtual);
+        });
     }
 
-    body {
-        margin-left: 0;
-        padding: 12px;
-    }
+    // Destaca automaticamente o título visível
+    const observador = new IntersectionObserver((entradas) => {
+        const visiveis = entradas
+            .filter(entrada => entrada.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
 
-    img {
-        max-width: 100%;
-        height: auto;
-    }
-}
+        if (visiveis.length > 0) {
+            atualizarAtivo(visiveis[0].target);
+        }
+    }, {
+        rootMargin: "-10% 0px -75% 0px"
+    });
+
+    titulos.forEach(titulo => observador.observe(titulo));
+});
 </body>
 </html>
