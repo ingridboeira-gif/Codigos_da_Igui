@@ -26,3 +26,93 @@ li{
     color:white;
     font-weight:bold;
 }
+/* Menu lateral */
+#menu-lateral {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    padding: 20px 15px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    background-color: #181818;
+    color: white;
+    z-index: 1000;
+    border-right: 2px solid #444;
+}
+
+#menu-lateral h2 {
+    font-size: 22px;
+    margin: 0 0 20px;
+    color: #f0c674;
+}
+
+#indice a {
+    display: block;
+    color: #ddd;
+    text-decoration: none;
+    padding: 9px 10px;
+    margin-bottom: 4px;
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 1.4;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+#indice a:hover {
+    background-color: #383838;
+    color: #f0c674;
+}
+
+/* Destaque do tópico atual */
+#indice a.ativo {
+    background-color: #444;
+    color: #f0c674;
+    border-left: 3px solid #f0c674;
+}
+
+/* Recuo conforme o nível do título */
+#indice a.nivel-2 {
+    padding-left: 22px;
+    font-size: 13px;
+}
+
+#indice a.nivel-3 {
+    padding-left: 36px;
+    font-size: 12px;
+}
+
+/* Espaço para o menu não cobrir o conteúdo */
+body {
+    margin-left: 280px;
+    padding: 20px;
+    scroll-behavior: smooth;
+}
+
+/* Evita que o título fique escondido ao navegar */
+h1, h2, h3 {
+    scroll-margin-top: 20px;
+}
+
+/* Adaptação para celulares */
+@media (max-width: 768px) {
+    #menu-lateral {
+        position: relative;
+        width: 100%;
+        height: auto;
+        max-height: 280px;
+        border-right: none;
+        border-bottom: 2px solid #444;
+    }
+
+    body {
+        margin-left: 0;
+        padding: 12px;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}
