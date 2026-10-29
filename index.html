@@ -7,6 +7,64 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    document.addEventListener("DOMContentLoaded", () => {
+    const indice = document.getElementById("indice");
+    const titulos = document.querySelectorAll("h1, h2, h3");
+    const links = [];
+
+    titulos.forEach((titulo, index) => {
+        // Cria um identificador para cada título
+        if (!titulo.id) {
+            titulo.id = `secao-${index + 1}`;
+        }
+
+        // Usa o texto do título como tópico
+        const texto = titulo.textContent.trim().replace(/\s+/g, " ");
+
+        const link = document.createElement("a");
+        link.href = `#${titulo.id}`;
+        link.textContent = texto;
+        link.classList.add(`nivel-${titulo.tagName.substring(1)}`);
+
+        // Navegação suave ao clicar
+        link.addEventListener("click", (evento) => {
+            evento.preventDefault();
+
+            titulo.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+            history.replaceState(null, "", `#${titulo.id}`);
+            atualizarAtivo(titulo);
+        });
+
+        indice.appendChild(link);
+        links.push({ titulo, link });
+    });
+
+    function atualizarAtivo(tituloAtual) {
+        links.forEach(({ titulo, link }) => {
+            link.classList.toggle("ativo", titulo === tituloAtual);
+        });
+    }
+
+    // Destaca automaticamente o título visível
+    const observador = new IntersectionObserver((entradas) => {
+        const visiveis = entradas
+            .filter(entrada => entrada.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+        if (visiveis.length > 0) {
+            atualizarAtivo(visiveis[0].target);
+        }
+    }, {
+        rootMargin: "-10% 0px -75% 0px"
+    });
+
+    titulos.forEach(titulo => observador.observe(titulo));
+});
+
 <aside id="menu-lateral">
     <h2>Índice</h2>
 
@@ -127,62 +185,6 @@ o meu exemplo para isso são e o caso anteriror são:
     <a href="https://youtu.be/UonuirklLkQ?si=tgz8qtvDuGO94uzp" >Ângulos e movimento</a>
     <hr>
     <a href="https://youtu.be/z8CG1dvNSOs?si=JNowydXy6c-_7E3b"> Stanley Kubrick</a>
-</footer>document.addEventListener("DOMContentLoaded", () => {
-    const indice = document.getElementById("indice");
-    const titulos = document.querySelectorAll("h1, h2, h3");
-    const links = [];
-
-    titulos.forEach((titulo, index) => {
-        // Cria um identificador para cada título
-        if (!titulo.id) {
-            titulo.id = `secao-${index + 1}`;
-        }
-
-        // Usa o texto do título como tópico
-        const texto = titulo.textContent.trim().replace(/\s+/g, " ");
-
-        const link = document.createElement("a");
-        link.href = `#${titulo.id}`;
-        link.textContent = texto;
-        link.classList.add(`nivel-${titulo.tagName.substring(1)}`);
-
-        // Navegação suave ao clicar
-        link.addEventListener("click", (evento) => {
-            evento.preventDefault();
-
-            titulo.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-
-            history.replaceState(null, "", `#${titulo.id}`);
-            atualizarAtivo(titulo);
-        });
-
-        indice.appendChild(link);
-        links.push({ titulo, link });
-    });
-
-    function atualizarAtivo(tituloAtual) {
-        links.forEach(({ titulo, link }) => {
-            link.classList.toggle("ativo", titulo === tituloAtual);
-        });
-    }
-
-    // Destaca automaticamente o título visível
-    const observador = new IntersectionObserver((entradas) => {
-        const visiveis = entradas
-            .filter(entrada => entrada.isIntersecting)
-            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-
-        if (visiveis.length > 0) {
-            atualizarAtivo(visiveis[0].target);
-        }
-    }, {
-        rootMargin: "-10% 0px -75% 0px"
-    });
-
-    titulos.forEach(titulo => observador.observe(titulo));
-});
+</footer>
 </body>
 </html>
