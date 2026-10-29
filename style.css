@@ -26,3 +26,13 @@ li{
     color:white;
     font-weight:bold;
 }
+#camera-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-size: 30px;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+}
