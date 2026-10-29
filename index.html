@@ -115,15 +115,15 @@ o meu exemplo para isso são e o caso anteriror são:
     <hr>
     <a href="https://youtu.be/z8CG1dvNSOs?si=JNowydXy6c-_7E3b"> Stanley Kubrick</a>
 </footer>
-    <div id="camera-cursor">📷</div>
+<div id="camera-cursor">📷</div>
 
 <script>
-    const camera = document.getElementById("camera-cursor");
+  const camera = document.querySelector("#camera-cursor");
 
-    document.addEventListener("mousemove", function(event) {
-        camera.style.left = event.clientX + "px";
-        camera.style.top = event.clientY + "px";
-    });
+  window.addEventListener("mousemove", (event) => {
+    camera.style.left = `${event.clientX}px`;
+    camera.style.top = `${event.clientY}px`;
+  });
 </script>
 </body>
 </html>
